@@ -1,0 +1,8 @@
+{
+  "name": "magic-oid",
+  "version": "2.0.0",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "stripe": "^16.2.0"
+  }
+}

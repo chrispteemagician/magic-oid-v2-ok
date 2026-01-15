@@ -1,0 +1,77 @@
+PROPRIETARY LICENSE
+
+Copyright (c) 2026 Chris P Tee / Chris P Tee Entertainments
+All Rights Reserved
+
+TERMS AND CONDITIONS
+
+1. OWNERSHIP
+   This software, including all code, expert prompts, documentation, and associated 
+   materials (the "Software"), is the exclusive proprietary property of Chris P Tee.
+
+2. VIEWING RIGHTS
+   You are permitted to:
+   - View the source code for educational purposes
+   - Study the architecture and implementation
+   - Reference this work in educational contexts with proper attribution
+
+3. RESTRICTIONS
+   You are expressly PROHIBITED from:
+   - Using this code to create competing identification applications
+   - Copying, modifying, or distributing the Software
+   - Using the expert prompts, knowledge bases, or AI instructions commercially
+   - Removing or altering copyright notices
+   - Creating derivative works based on this Software
+   - Using the "-Oid" naming pattern for competing services
+   - Reverse engineering for commercial purposes
+
+4. COMMERCIAL USE
+   Any commercial use, including but not limited to:
+   - Deploying this software as a service
+   - Integrating into commercial products
+   - Using the prompts or methods in competing applications
+   - White-labeling or reselling
+   
+   ...requires explicit written permission and a separate commercial license 
+   from Chris P Tee.
+
+5. PERSONAL/EDUCATIONAL DEPLOYMENT
+   You may deploy an unmodified copy for personal or educational use only, 
+   provided:
+   - No commercial gain is derived
+   - All copyright notices remain intact
+   - Attribution to Chris P Tee is maintained
+
+6. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+7. LIMITATION OF LIABILITY
+   IN NO EVENT SHALL CHRIS P TEE BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+   LIABILITY ARISING FROM THE USE OF THIS SOFTWARE.
+
+8. TERMINATION
+   This license automatically terminates if you violate any of these terms. 
+   Upon termination, you must destroy all copies of the Software.
+
+9. ENFORCEMENT
+   Violation of this license may result in legal action and claims for damages.
+
+10. FUTURE LICENSING
+    The copyright holder reserves the right to offer this software under 
+    different license terms in the future.
+
+CONTACT FOR LICENSING INQUIRIES:
+For commercial licensing, partnerships, or permissions:
+- Website: https://chrisptee.com
+- Business: Chris P Tee Entertainments
+
+---
+
+This software incorporates knowledge and expertise developed over 30+ years 
+of professional performance. The expert prompts, knowledge bases, and 
+methodologies represent substantial proprietary intellectual property.
+
+Unauthorized commercial use undermines the creator's livelihood and will be 
+pursued to the fullest extent of the law.

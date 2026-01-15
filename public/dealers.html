@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Become a Pollinator Dealer | Magic-Oid</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+    body { font-family: 'Poppins', sans-serif; }
+    .gradient-bg { background: linear-gradient(135deg, #4c1d95 0%, #8b5cf6 100%); }
+  </style>
+</head>
+<body class="gradient-bg text-white font-sans p-6">
+  <div class="max-w-3xl mx-auto text-center">
+    
+    <header class="mb-12 pt-8">
+      <div class="text-7xl mb-4">🎩✨</div>
+      <h1 class="text-5xl font-bold mb-4">Become a Magic Pollinator</h1>
+      <p class="text-2xl opacity-90 font-light">Join the "One Image Detective" Network</p>
+    </header>
+
+    <div class="bg-white/10 backdrop-blur-md p-8 rounded-3xl text-left shadow-2xl mb-12">
+      <h2 class="text-3xl font-bold mb-6 text-purple-200">The Problem with Magic Today</h2>
+      <p class="text-lg mb-6 leading-relaxed">
+        Too much noise. Too many ads. Too much bullshit. For neurospicy brains (and everyone else), trying to identify a trick or find its history is overwhelming.
+      </p>
+      <h2 class="text-3xl font-bold mb-6 text-purple-200">The "Oid" Solution</h2>
+      <p class="text-lg mb-6 leading-relaxed">
+        Magic-Oid is a simple, focused tool. No ads. No distractions. Just one photo to get the answers they need. It's part of a larger ecosystem of "Oids" designed to connect communities without the clutter.
+      </p>
+    </div>
+
+    <div class="bg-slate-900 p-8 rounded-3xl border-4 border-purple-500 shadow-2xl mb-12 relative overflow-hidden">
+      <div class="absolute top-0 right-0 bg-purple-600 text-xs font-bold px-4 py-2 rounded-bl-2xl">FOUNDER TIER OPEN</div>
+      
+      <h2 class="text-4xl font-bold mb-8 text-center">Your Role as a Dealer</h2>
+      
+      <div class="grid md:grid-cols-2 gap-8 text-left">
+        <div>
+          <h3 class="text-xl font-bold text-purple-300 mb-2">1. The Magic Hub</h3>
+          <p class="text-slate-300">Your shop becomes a destination. Customers run out of free scans at home, so they come to YOU to use your unlimited shop QR code.</p>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-purple-300 mb-2">2. The Pollinator</h3>
+          <p class="text-slate-300">By displaying the QR code, you aren't just offering a service. You are connecting magicians to a cleaner, simpler way of interacting with our art.</p>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center">
+        <div class="text-5xl font-bold mb-2">£97 <span class="text-2xl text-slate-400">/ Year</span></div>
+        <p class="text-purple-300 mb-8">Lock in Founder Pricing Forever (Will increase later)</p>
+        
+        <button id="checkoutBtn" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-6 rounded-2xl text-2xl transition transform hover:scale-105 shadow-lg">
+          🚀 Become a Founder Pollinator
+        </button>
+        <p class="text-xs text-slate-400 mt-4">Secure payment via Stripe. Instant access to dealer assets.</p>
+      </div>
+    </div>
+
+    <a href="/" class="text-purple-200 hover:text-white transition font-bold">← Back to the Magic-Oid App</a>
+  </div>
+
+  <script>
+    document.getElementById('checkoutBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('checkoutBtn');
+      btn.innerText = "Initializing Secure Checkout...";
+      try {
+        const res = await fetch('/api/dealers-create-checkout', { method: 'POST' });
+        const data = await res.json();
+        if(data.url) window.location.href = data.url;
+        else throw new Error("API Error");
+      } catch(e) { 
+        alert("Connection failed. Please ensure API keys are set."); 
+        btn.innerText = "🚀 Try Again"; 
+      }
+    });
+  </script>
+</body>
+</html>
