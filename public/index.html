@@ -2,319 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Magic-Oid | The Magic AI</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#7c3aed">
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become a Founder Dealer</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #7c3aed; color: #333; padding-bottom: 80px; }
-        .app-header { text-align: center; color: white; padding: 2rem 1rem; }
-        .main-card { background: white; border-radius: 24px 24px 0 0; min-height: 80vh; padding: 1.5rem; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
-        .tab-btn { padding: 12px 0; border-radius: 12px; font-weight: 700; transition: all 0.2s; }
-        .btn-primary { background: #7c3aed; color: white; font-weight: bold; padding: 1rem; border-radius: 12px; width: 100%; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3); }
-        .btn-coffee { background: #f59e0b; color: white; font-weight: bold; }
-        .btn-share { background: #10b981; color: white; font-weight: bold; }
-        .pro-badge { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 5px; vertical-align: middle; }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>body { background: #7c3aed; font-family: 'Poppins', sans-serif; }</style>
 </head>
-<body>
-    <div id="root"></div>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full">
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-purple-900">Founder Dealer Access</h1>
+            <p class="text-gray-500 text-sm mt-1">Establish your shop in the Magic-Oid Village.</p>
+        </div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-
-        // --- COMPONENTS ---
-
-        // 1. THE NUDGE MODAL (Corrected Rewards)
-        const NudgeModal = ({ onClose, onShare, onCoffee }) => (
-            <div className="modal-overlay fade-in">
-                <div className="bg-white rounded-2xl p-6 max-w-sm w-full text-center relative">
-                    <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">✕</button>
-                    
-                    <div className="text-5xl mb-4">✨</div>
-                    <h2 className="text-2xl font-bold text-purple-900 mb-2">Unlock Pro Powers</h2>
-                    <p className="text-gray-600 mb-6 text-sm">Get authentication checks, valuations, and access to the Green Room.</p>
-                    
-                    <div className="space-y-3">
-                        {/* Option 1: Join Family (Unlimited) */}
-                        <a href="https://feelfamous.co.uk/join" target="_blank" className="block w-full btn-primary py-3 rounded-xl flex items-center justify-center">
-                            <span>Join Kudos Family (£4.95)</span>
-                            <span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded">UNLIMITED</span>
-                        </a>
-                        
-                        {/* Option 2: Coffee (24 Hours) */}
-                        <a href="https://buymeacoffee.com/chrispteemagician" target="_blank" onClick={onCoffee} className="block w-full btn-coffee py-3 rounded-xl flex items-center justify-center cursor-pointer">
-                            <span>☕ Buy Chris a Coffee</span>
-                            <span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded">24 HOURS PRO</span>
-                        </a>
-
-                        <div className="relative">
-                            <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-gray-200"></div>
-                            </div>
-                            <div className="relative flex justify-center text-xs uppercase">
-                                <span className="bg-white px-2 text-gray-500">Or get a free sample</span>
-                            </div>
-                        </div>
-
-                        {/* Option 3: Share (1 Credit) */}
-                        <button onClick={onShare} className="w-full btn-share py-3 rounded-xl flex items-center justify-center">
-                            <i className="fa-solid fa-share-nodes mr-2"></i>
-                            <span>Share App</span>
-                            <span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded">1 FREE PRO SCAN</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-
-        // 2. THE GREEN ROOM
-        const GreenRoom = () => (
-            <div className="mt-8 bg-purple-50 rounded-xl p-4 border border-purple-100">
-                <h3 className="text-lg font-bold text-purple-900 mb-4 flex items-center">
-                    🎩 The Green Room <span className="pro-badge">PRO</span>
-                </h3>
-                
-                <div className="space-y-4">
-                    <div className="bg-white p-3 rounded-lg shadow-sm flex items-start">
-                        <div className="text-2xl mr-3">🃏</div>
-                        <div>
-                            <div className="text-xs font-bold text-purple-500 uppercase">Trick of the Week</div>
-                            <div className="font-bold text-gray-800">The Invisible Deck</div>
-                            <p className="text-xs text-gray-500">Why it's still the best "Out" in magic. Don't leave home without it.</p>
-                        </div>
-                    </div>
-
-                    <div className="bg-white p-3 rounded-lg shadow-sm flex items-start">
-                        <div className="text-2xl mr-3">🏪</div>
-                        <div>
-                            <div className="text-xs font-bold text-purple-500 uppercase">Dealer of the Week</div>
-                            <div className="font-bold text-gray-800">PropDog UK</div>
-                            <p className="text-xs text-gray-500">Dave and the team are revolutionizing how props are built. Kindness first.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-
-        const App = () => {
-            const [mode, setMode] = useState('identify');
-            const [img, setImg] = useState(null);
-            const [analysis, setAnalysis] = useState('');
-            const [loading, setLoading] = useState(false);
+        <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6 text-center">
+            <p class="text-xs font-bold text-yellow-800 uppercase tracking-widest mb-1">Limited Time Founder Offer</p>
             
-            // Logic State
-            const [isPro, setIsPro] = useState(false);
-            const [proCredits, setProCredits] = useState(0); // 1 Credit = 1 Scan
-            const [showNudge, setShowNudge] = useState(false);
-            const fileRef = useRef(null);
+            <div class="text-4xl font-extrabold text-purple-900 my-2">£97 <span class="text-sm font-normal text-gray-500">/ year</span></div>
+            
+            <div class="text-xs text-red-500 font-bold mt-1">
+                Regular Price After Feb: <span class="line-through text-gray-400">£295/yr</span> or <span class="line-through text-gray-400">£49.95/month</span>
+            </div>
+            
+            <p class="text-[10px] text-gray-500 mt-2">Lock in this rate forever.</p>
+            <p class="text-xs font-bold text-green-600 mt-2 border-t border-yellow-200 pt-2">✅ 30-Day Money Back Guarantee</p>
+        </div>
+        
+        <form name="magicoid-dealer-founder" method="POST" data-netlify="true" action="/dealers/success">
+            <input type="hidden" name="form-name" value="magicoid-dealer-founder" />
+            
+            <label class="block text-xs font-bold text-gray-700 mb-1">Shop / Business Name</label>
+            <input type="text" name="business" class="w-full p-3 bg-gray-50 border rounded-lg mb-4" placeholder="e.g. Prestige Magic" required>
+            
+            <label class="block text-xs font-bold text-gray-700 mb-1">Email</label>
+            <input type="email" name="email" class="w-full p-3 bg-gray-50 border rounded-lg mb-6" required>
+            
+            <button class="w-full bg-purple-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-purple-700 transition transform active:scale-95">
+                Secure Founder Rate (£97)
+            </button>
+        </form>
 
-            useEffect(() => {
-                // Check 1: Is Kudos Family (Unlimited)
-                const unlocked = localStorage.getItem('kudos_unlocked');
-                if (unlocked === 'true') {
-                    setIsPro(true);
-                    return;
-                }
-
-                // Check 2: Is Coffee Active (24 Hours)
-                const coffeeExpiry = localStorage.getItem('magicoid_coffee_expiry');
-                if (coffeeExpiry && parseInt(coffeeExpiry) > Date.now()) {
-                    setIsPro(true);
-                    return;
-                }
-
-                // Check 3: Check Credits
-                const savedCredits = parseInt(localStorage.getItem('magicoid_credits') || '0');
-                setProCredits(savedCredits);
-                setIsPro(false); // Default to basic unless credits used
-            }, []);
-
-            const triggerShare = () => {
-                // Simulate Share Action
-                const shareData = {
-                    title: 'Magic-Oid',
-                    text: 'Identify magic tricks instantly with Magic-Oid! Join me on the Kudos network.',
-                    url: window.location.href
-                };
-
-                if (navigator.share) {
-                    navigator.share(shareData).then(() => giveCredit());
-                } else {
-                    alert("Link copied! (Simulated)");
-                    giveCredit();
-                }
-            };
-
-            const giveCredit = () => {
-                const newCredits = proCredits + 1;
-                setProCredits(newCredits);
-                localStorage.setItem('magicoid_credits', newCredits);
-                setShowNudge(false);
-                alert("🎉 You earned 1 Free Pro Scan! Use it wisely.");
-            };
-
-            const triggerCoffee = () => {
-                // In a real app, this would verify payment. 
-                // Here we simulate the 24h unlock upon clicking the button (trust-based/demo)
-                const expiry = Date.now() + (24 * 60 * 60 * 1000); // 24 hours
-                localStorage.setItem('magicoid_coffee_expiry', expiry);
-                setIsPro(true);
-                setShowNudge(false);
-                // The link opens in new tab, logic continues here
-            };
-
-            const handleScan = async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                // LOGIC: Do we run a PRO scan or a BASIC scan?
-                let runPro = isPro;
-
-                // If not unlimited Pro, but has credits, ask to use one? 
-                // For simplicity, if they have credits, we upgrade this scan automatically.
-                if (!isPro && proCredits > 0) {
-                    const confirmUse = confirm(`Use 1 Credit for a Pro Analysis? (Credits left: ${proCredits})`);
-                    if (confirmUse) {
-                        runPro = true;
-                        const remaining = proCredits - 1;
-                        setProCredits(remaining);
-                        localStorage.setItem('magicoid_credits', remaining);
-                    }
-                }
-
-                setLoading(true);
-                const reader = new FileReader();
-                reader.onload = async (ev) => {
-                    setImg(ev.target.result);
-                    const base64 = ev.target.result.split(',')[1];
-                    try {
-                        const res = await fetch('/.netlify/functions/analyze-magic', {
-                            method: 'POST', body: JSON.stringify({ image: { data: base64 }, mode, proMode: runPro })
-                        });
-                        const data = await res.json();
-                        setAnalysis(data.result);
-                    } catch (err) { setAnalysis("❌ Connection failed."); }
-                    setLoading(false);
-                };
-                reader.readAsDataURL(file);
-            };
-
-            return (
-                <div className="min-h-screen flex flex-col">
-                    {/* Header */}
-                    <div className="app-header">
-                        <div className="flex justify-center items-center gap-2">
-                            <h1 className="text-4xl font-extrabold mb-1">Magic-Oid</h1>
-                            {isPro && <span className="bg-yellow-400 text-purple-900 text-xs font-bold px-2 py-1 rounded">PRO ACTIVE</span>}
-                        </div>
-                        <p className="text-purple-200 text-sm opacity-90">Identify • Authenticate • Connect</p>
-                        
-                        <div className="flex gap-3 justify-center mt-4">
-                            <a href="/dealers/" className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full text-xs font-bold transition">
-                                🤝 Become a Dealer
-                            </a>
-                            {!isPro && (
-                                <button onClick={() => setShowNudge(true)} className="bg-purple-900/50 hover:bg-purple-900/70 text-purple-100 px-4 py-2 rounded-full text-xs font-bold transition">
-                                    🔓 Unlock Pro {proCredits > 0 ? `(${proCredits} Credits)` : ''}
-                                </button>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Main Card */}
-                    <div className="main-card flex-grow relative">
-                        
-                        {/* Tabs */}
-                        <div className="flex bg-gray-100 p-1 rounded-xl mb-6">
-                            <button onClick={() => setMode('identify')} className={`flex-1 tab-btn ${mode==='identify' ? 'bg-white shadow text-purple-600' : 'text-gray-400'}`}>
-                                🔮 Identify
-                            </button>
-                            <button onClick={() => setMode('roast')} className={`flex-1 tab-btn ${mode==='roast' ? 'bg-white shadow text-orange-500' : 'text-gray-400'}`}>
-                                🔥 Roast Me
-                            </button>
-                        </div>
-
-                        {/* Scanner */}
-                        {!img ? (
-                            <div onClick={() => fileRef.current.click()} className="upload-area group">
-                                <div className="text-5xl mb-3 group-hover:scale-110 transition duration-300">📸</div>
-                                <h3 className="text-xl font-bold text-gray-800">Tap to Analyze</h3>
-                                <p className="text-gray-400 text-sm mt-1">
-                                    {isPro ? 'Pro Mode: Full Valuation & Auth' : 'Basic Identification (Free)'}
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="space-y-4">
-                                <img src={img} className="w-full rounded-2xl shadow-lg border border-gray-100" />
-                                
-                                {loading && (
-                                    <div className="text-center py-8">
-                                        <div className="animate-spin text-4xl mb-2">🔮</div>
-                                        <p className="font-bold text-purple-600">Consulting the Oracle...</p>
-                                    </div>
-                                )}
-
-                                {analysis && (
-                                    <div className="bg-purple-50 p-6 rounded-xl prose prose-purple text-sm max-w-none border border-purple-100" 
-                                         dangerouslySetInnerHTML={{ __html: marked.parse(analysis) }} />
-                                )}
-
-                                {/* Lock Message if Free Mode */}
-                                {!isPro && analysis && (
-                                    <div onClick={() => setShowNudge(true)} className="bg-gray-800 text-white p-4 rounded-xl text-center cursor-pointer hover:bg-gray-700 transition shadow-lg">
-                                        <p className="font-bold mb-1">🔒 Valuation & Authenticity Hidden</p>
-                                        <p className="text-xs text-gray-300 mb-2">Buy a coffee or share to unlock details</p>
-                                        <div className="inline-block bg-white/20 text-xs px-3 py-1 rounded-full">Unlock Now</div>
-                                    </div>
-                                )}
-
-                                <button onClick={() => {setImg(null); setAnalysis('')}} className="btn-primary">
-                                    Analyze Another
-                                </button>
-                            </div>
-                        )}
-                        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleScan} />
-
-                        {/* Green Room */}
-                        {isPro ? <GreenRoom /> : (
-                            <div className="mt-8 opacity-60 filter grayscale cursor-pointer" onClick={() => setShowNudge(true)}>
-                                <h3 className="text-lg font-bold text-gray-400 mb-2">The Green Room (Locked)</h3>
-                                <div className="bg-gray-100 p-4 rounded-xl text-center border-2 border-dashed border-gray-300">
-                                    <p className="text-sm font-bold text-gray-500">Join to see Trick of the Week</p>
-                                    <p className="text-xs text-gray-400 mt-1">Exclusive Dealer Discounts & Tips</p>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Footer */}
-                        <div className="mt-12 text-center border-t border-gray-100 pt-6">
-                            <p className="text-xs font-bold text-purple-900 mb-2">Dedication to the Legends</p>
-                            <p className="text-[10px] text-gray-400 italic mb-4">
-                                Paul Daniels • David Copperfield • Wayne Dobson • Ali Bongo
-                            </p>
-                            <p className="text-[10px] text-gray-300">
-                                Part of the <a href="https://feelfamous.co.uk" className="text-purple-500 font-bold hover:underline">FeelFamous</a> Ecosystem
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Upsell Modal */}
-                    {showNudge && <NudgeModal onClose={() => setShowNudge(false)} onShare={triggerShare} onCoffee={triggerCoffee} />}
-                </div>
-            );
-        };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+        <div class="mt-6 text-center text-xs text-gray-400">
+            <p>Join the ecosystem. No social media noise.</p>
+            <a href="/" class="underline mt-2 inline-block hover:text-purple-500">Return to App</a>
+        </div>
+    </div>
 </body>
 </html>
