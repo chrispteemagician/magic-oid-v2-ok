@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Magic-Oid | The Digital Village for Magicians</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #1a0b2e; color: #fff; }
+        .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .polaroid-font { font-family: 'Permanent Marker', cursive; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- SMART POLAROID GENERATOR ---
+        const generatePolaroid = async (imageSrc, text, mode) => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 1080;
+            canvas.height = 1350;
+
+            // 1. White Background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 1080, 1350);
+
+            // 2. Load Image
+            const img = new Image();
+            img.src = imageSrc;
+            await new Promise(r => img.onload = r);
+            
+            // Center Crop
+            const imgSize = 980; 
+            const sourceAspect = img.width / img.height;
+            let sx, sy, sw, sh;
+            
+            if (sourceAspect > 1) {
+                sh = img.height; sw = img.height; sx = (img.width - img.height) / 2; sy = 0;
+            } else {
+                sw = img.width; sh = img.width; sx = 0; sy = (img.height - img.width) / 2;
+            }
+            
+            ctx.drawImage(img, sx, sy, sw, sh, 50, 50, imgSize, imgSize);
+            ctx.strokeStyle = '#e5e5e5'; ctx.lineWidth = 2; ctx.strokeRect(50, 50, imgSize, imgSize);
+
+            // 3. TEXT PARSING LOGIC
+            ctx.textAlign = 'center';
+
+            if (mode === 'roast') {
+                // ROAST MODE: Big Funny Font
+                ctx.fillStyle = '#000000';
+                ctx.font = '45px "Permanent Marker"';
+                let caption = text.replace(/\*\*/g, '').split('.')[0] + '.';
+                if (caption.length > 60) caption = caption.substring(0, 57) + "...";
+                ctx.fillText(caption, 540, 1150);
+            
+            } else {
+                // IDENTIFY MODE: Structured Data (Title, Author, Price)
+                
+                // Parse Title (From "THE GEAR:")
+                let title = "Unknown Item";
+                const gearMatch = text.match(/THE GEAR: (.*?)(?:\n|\.|,)/);
+                if (gearMatch) title = gearMatch[1].substring(0, 35); // Keep it short
+
+                // Parse Price (Look for currency symbols)
+                let price = "Priceless";
+                const priceMatch = text.match(/£[\d,]+(\s*-\s*£[\d,]+)?/);
+                if (priceMatch) price = priceMatch[0];
+
+                // Draw Title (Black, Bold)
+                ctx.fillStyle = '#1a1a1a';
+                ctx.font = 'bold 50px "Poppins"';
+                ctx.fillText(title, 540, 1130);
+
+                // Draw Price (Green, Bold)
+                ctx.fillStyle = '#16a34a'; // Green-600
+                ctx.font = 'bold 45px "Poppins"';
+                ctx.fillText(`Est. Value: ${price}`, 540, 1190);
+            }
+
+            // 4. Footer & QR
+            ctx.font = '30px "Poppins"';
+            ctx.fillStyle = '#666666';
+            ctx.fillText("magic-oid.co.uk", 540, 1280);
+
+            const qr = new Image();
+            qr.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://magic-oid.co.uk`;
+            qr.crossOrigin = "Anonymous";
+            await new Promise(r => qr.onload = r);
+            ctx.drawImage(qr, 880, 1150, 150, 150);
+
+            const link = document.createElement('a');
+            link.download = `magic-oid-${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        };
+
+        // --- COMPONENTS ---
+        const Header = ({ user, onLoginClick, kudos }) => (
+            <header className="sticky top-0 z-50 bg-[#1a0b2e]/90 backdrop-blur-md border-b border-white/10 p-4">
+                <div className="max-w-4xl mx-auto flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                        <span className="text-2xl">🎩</span>
+                        <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+                            Magic-Oid
+                        </h1>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        {user ? (
+                            <div className="flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full border border-white/5">
+                                <span className="text-yellow-400 text-sm">✨ {kudos}</span>
+                            </div>
+                        ) : (
+                            <button onClick={onLoginClick} className="text-xs bg-purple-600 px-3 py-1 rounded-full font-semibold">
+                                Join
+                            </button>
+                        )}
+                    </div>
+                </div>
+            </header>
+        );
+
+        const VillageNoticeBoard = () => {
+            const notices = [
+                { id: 1, type: 'WANTED', title: 'Dove Pan Routine Ideas', author: 'MagicMike', time: '2h ago', content: 'Looking for a fresh take on the classic Dove Pan. No livestock ideally!' },
+                { id: 2, type: 'GIG SWAP', title: 'Saturday Cover Needed - Bristol', author: 'CardShark99', time: '5h ago', content: 'Double booked for a wedding. £250 fee. Close-up only. DM me.' },
+                { id: 3, type: 'FOR SALE', title: 'Vintage Thayer Table', author: 'CollectorKen', time: '1d ago', content: 'Original condition. Pickup only from Chipping Sodbury.' },
+                { id: 4, type: 'ALERT', title: 'Beware of scammer on Facebook', author: 'Admin', time: 'Pinned', content: 'Someone selling fake Tenyo props. Watch out.' }
+            ];
+
+            return (
+                <div className="mt-8 space-y-4 animate-fade-in">
+                    <div className="flex justify-between items-end mb-4">
+                        <h2 className="text-2xl font-bold text-white">🏰 The Village Square</h2>
+                        <span className="text-xs text-purple-300">Live Notices</span>
+                    </div>
+                    <div className="grid gap-4">
+                        {notices.map(notice => (
+                            <div key={notice.id} className="glass-panel p-4 rounded-xl border-l-4 border-purple-500 hover:bg-white/10 transition cursor-pointer">
+                                <div className="flex justify-between items-start mb-2">
+                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                                        notice.type === 'WANTED' ? 'bg-orange-500/20 text-orange-300' :
+                                        notice.type === 'GIG SWAP' ? 'bg-green-500/20 text-green-300' :
+                                        notice.type === 'ALERT' ? 'bg-red-500/20 text-red-300' :
+                                        'bg-blue-500/20 text-blue-300'
+                                    }`}>{notice.type}</span>
+                                    <span className="text-xs text-gray-400">{notice.time}</span>
+                                </div>
+                                <h3 className="font-bold text-base leading-tight mb-1">{notice.title}</h3>
+                                <p className="text-xs text-gray-300 mb-3 line-clamp-2">{notice.content}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        const ProfileModal = ({ isOpen, onClose, onSignup }) => {
+            if (!isOpen) return null;
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                onSignup({ name: formData.get('name'), email: formData.get('email'), role: formData.get('role'), location: formData.get('location') });
+            };
+            return (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                    <div className="bg-[#2d1b4e] w-full max-w-md rounded-2xl p-6 border border-purple-500/30 shadow-2xl relative">
+                        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white">✕</button>
+                        <div className="text-center mb-6">
+                            <span className="text-4xl">🛂</span>
+                            <h2 className="text-2xl font-bold text-white mt-2">Oid Passport</h2>
+                            <p className="text-purple-300 text-sm">Your ID for the Magic Ecosystem.</p>
+                        </div>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div><label className="block text-xs text-purple-300 mb-1">Stage Name</label><input name="name" required className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-purple-500 outline-none" /></div>
+                            <div><label className="block text-xs text-purple-300 mb-1">Email</label><input name="email" type="email" required className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-purple-500 outline-none" /></div>
+                            <button type="submit" className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 rounded-lg mt-4 hover:opacity-90 transition">Create Passport (+50 Kudos)</button>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [mode, setMode] = useState('identify');
+            const [user, setUser] = useState(null);
+            const [kudos, setKudos] = useState(0);
+            const [showProfileModal, setShowProfileModal] = useState(false);
+            const [image, setImage] = useState(null);
+            const [imagePreview, setImagePreview] = useState(null);
+            const [loading, setLoading] = useState(false);
+            const [result, setResult] = useState(null);
+            const [error, setError] = useState(null);
+            const cameraInputRef = useRef(null);
+            const galleryInputRef = useRef(null);
+
+            useEffect(() => {
+                const savedUser = localStorage.getItem('oid_passport');
+                if (savedUser) { setUser(JSON.parse(savedUser)); setKudos(parseInt(localStorage.getItem('oid_kudos') || '50')); }
+                else { setTimeout(() => setShowProfileModal(true), 2000); }
+            }, []);
+
+            const handleSignup = (userData) => {
+                setUser(userData); setKudos(50);
+                localStorage.setItem('oid_passport', JSON.stringify(userData)); localStorage.setItem('oid_kudos', '50');
+                setShowProfileModal(false);
+            };
+
+            const resizeImage = (file) => {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            let width = img.width, height = img.height, maxSize = 800;
+                            if (width > height && width > maxSize) { height = (height / width) * maxSize; width = maxSize; }
+                            else if (height > maxSize) { width = (width / height) * maxSize; height = maxSize; }
+                            canvas.width = width; canvas.height = height;
+                            ctx.drawImage(img, 0, 0, width, height); resolve(canvas.toDataURL('image/jpeg', 0.7));
+                        };
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            };
+
+            const handleImageSelect = async (e) => {
+                const file = e.target.files[0]; if (!file) return;
+                setLoading(true); setError(null); setResult(null);
+                try {
+                    const resizedData = await resizeImage(file);
+                    setImagePreview(resizedData);
+                    const base64Data = resizedData.split(',')[1];
+                    const response = await fetch('/api/analyze-magic', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ image: { data: base64Data }, mode: mode === 'roast' ? 'roast' : 'identify' })
+                    });
+                    const data = await response.json();
+                    if (!response.ok) throw new Error(data.error || 'The Oracle is silent');
+                    setResult(data.result);
+                    const newKudos = kudos + 10; setKudos(newKudos); localStorage.setItem('oid_kudos', newKudos.toString());
+                } catch (err) { setError(err.message); } finally { setLoading(false); }
+            };
+
+            return (
+                <div className="min-h-screen pb-20">
+                    <Header user={user} kudos={kudos} onLoginClick={() => setShowProfileModal(true)} />
+                    <ProfileModal isOpen={showProfileModal} onClose={() => setShowProfileModal(false)} onSignup={handleSignup} />
+                    <main className="max-w-xl mx-auto p-4">
+                        <div className="flex bg-white/5 rounded-2xl p-1 mb-8">
+                            <button onClick={() => setMode('identify')} className={`flex-1 py-3 rounded-xl font-semibold transition text-sm ${mode === 'identify' ? 'bg-purple-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}>🔮 Identify</button>
+                            <button onClick={() => setMode('roast')} className={`flex-1 py-3 rounded-xl font-semibold transition text-sm ${mode === 'roast' ? 'bg-orange-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}>🔥 Roast Me</button>
+                            <button onClick={() => setMode('village')} className={`flex-1 py-3 rounded-xl font-semibold transition text-sm ${mode === 'village' ? 'bg-teal-600 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}>🏰 Village</button>
+                        </div>
+                        {mode === 'village' && <VillageNoticeBoard />}
+                        {mode !== 'village' && (
+                            <div className="glass-panel rounded-3xl p-6 relative overflow-hidden">
+                                {!imagePreview ? (
+                                    <div className="text-center py-8">
+                                        <div className="text-6xl mb-4 animate-bounce">{mode === 'roast' ? '😈' : '📸'}</div>
+                                        <h2 className="text-2xl font-bold mb-2">{mode === 'roast' ? 'Prepare for Destruction' : 'Identify Magic'}</h2>
+                                        <p className="text-gray-400 mb-8 text-sm px-4">{mode === 'roast' ? 'Upload a selfie. Doc Strange will roast you alive.' : 'Snap a photo of any prop. Chris P Tee will tell you what it is.'}</p>
+                                        <div className="flex flex-col gap-3">
+                                            <button onClick={() => cameraInputRef.current?.click()} className="bg-white text-purple-900 font-bold py-4 px-6 rounded-xl hover:bg-gray-100 flex items-center justify-center gap-2"><span>📷</span> Take Photo</button>
+                                            <button onClick={() => galleryInputRef.current?.click()} className="bg-white/10 text-white font-bold py-4 px-6 rounded-xl hover:bg-white/20 flex items-center justify-center gap-2"><span>🖼️</span> Gallery</button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-6">
+                                        <div className="relative rounded-2xl overflow-hidden border border-white/20">
+                                            <img src={imagePreview} className="w-full h-64 object-cover" />
+                                            {loading && <div className="absolute inset-0 bg-black/60 flex items-center justify-center"><div className="text-center"><div className="text-4xl animate-spin mb-2">🪄</div><p className="text-sm font-semibold animate-pulse">Consulting the Spirits...</p></div></div>}
+                                        </div>
+                                        {error && <div className="bg-red-500/20 text-red-200 p-4 rounded-xl text-center text-sm border border-red-500/30">{error}<button onClick={() => setImagePreview(null)} className="block w-full mt-2 text-white underline">Try Again</button></div>}
+                                        {result && (
+                                            <div className="prose prose-invert max-w-none">
+                                                <div className="bg-black/30 p-5 rounded-xl border border-white/10 text-sm" dangerouslySetInnerHTML={{ __html: marked.parse(result) }} />
+                                                <div className="flex gap-2 mt-4">
+                                                    <button onClick={() => { setImagePreview(null); setResult(null); }} className="flex-1 bg-white/10 hover:bg-white/20 py-3 rounded-xl font-semibold transition">Start Over</button>
+                                                    <button onClick={() => generatePolaroid(imagePreview, result, mode)} className="flex-1 bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2"><span>📸</span> Save Polaroid</button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                                <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" onChange={handleImageSelect} className="hidden" />
+                                <input ref={galleryInputRef} type="file" accept="image/*" onChange={handleImageSelect} className="hidden" />
+                            </div>
+                        )}
+                        <div className="mt-8 text-center space-y-4">
+                            <p className="text-xs text-gray-500">Part of the <span className="text-purple-400">Oid Network</span> • Built by Chris P Tee</p>
+                            <div className="flex justify-center gap-4 text-xs text-gray-400"><a href="https://feelfamous.co.uk" className="hover:text-white">FeelFamous Hub</a><span>•</span><a href="https://buymeacoffee.com/chrispteemagician" className="hover:text-yellow-400">Buy Coffee</a></div>
+                        </div>
+                    </main>
+                </div>
+            );
+        };
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
