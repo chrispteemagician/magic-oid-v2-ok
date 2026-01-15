@@ -14,15 +14,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #7c3aed; color: #333; padding-bottom: 80px; }
+        body { font-family: 'Poppins', sans-serif; background-color: #7c3aed; color: #333; padding-bottom: 40px; margin: 0; }
         .app-header { text-align: center; color: white; padding: 2rem 1rem; }
-        .main-card { background: white; border-radius: 24px 24px 0 0; min-height: 80vh; padding: 1.5rem; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
+        
+        /* The "Classic" Card Design */
+        .main-card { background: white; border-radius: 24px 24px 0 0; min-height: 80vh; padding: 1.5rem; box-shadow: 0 -10px 40px rgba(0,0,0,0.2); }
+        
         .tab-btn { padding: 12px 0; border-radius: 12px; font-weight: 700; transition: all 0.2s; }
-        .btn-primary { background: #7c3aed; color: white; font-weight: bold; padding: 1rem; border-radius: 12px; width: 100%; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3); }
+        .upload-area { border: 3px dashed #e5e7eb; border-radius: 20px; padding: 3rem 1rem; text-align: center; transition: all 0.2s; background: #f9fafb; cursor: pointer; }
+        .upload-area:active { background: #f3f4f6; border-color: #7c3aed; }
+        
+        .btn-primary { background: #7c3aed; color: white; font-weight: bold; padding: 1rem; border-radius: 12px; width: 100%; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
         .btn-coffee { background: #f59e0b; color: white; font-weight: bold; }
         .btn-share { background: #10b981; color: white; font-weight: bold; }
-        .pro-badge { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 5px; vertical-align: middle; }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
+        
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; backdrop-filter: blur(5px); }
+        .pro-badge { background: #fbbf24; color: #78350f; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; margin-left: 8px; font-weight: 800; vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -31,53 +38,31 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
+        // --- COMPONENTS ---
+
         const NudgeModal = ({ onClose, onShare }) => (
-            <div className="modal-overlay fade-in">
-                <div className="bg-white rounded-2xl p-6 max-w-sm w-full text-center relative">
-                    <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">✕</button>
+            <div className="modal-overlay">
+                <div className="bg-white rounded-3xl p-6 max-w-sm w-full text-center relative shadow-2xl transform transition-all scale-100">
+                    <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full">✕</button>
                     <div className="text-5xl mb-4">✨</div>
-                    <h2 className="text-2xl font-bold text-purple-900 mb-2">Unlock Pro Powers</h2>
-                    <p className="text-gray-600 mb-6 text-sm">Become a <strong>Bridge Walker</strong>. Access authentication & valuations.</p>
+                    <h2 className="text-2xl font-extrabold text-purple-900 mb-2">Unlock Pro Powers</h2>
+                    <p className="text-gray-500 mb-6 text-sm">Become a <strong>Bridge Walker</strong>. Access authentication, valuations & The Green Room.</p>
+                    
                     <div className="space-y-3">
-                        <a href="https://feelfamous.co.uk/join" target="_blank" className="block w-full btn-primary py-3 rounded-xl flex items-center justify-center">
+                        <a href="https://feelfamous.co.uk/join" target="_blank" className="block w-full btn-primary py-4 rounded-xl flex items-center justify-center">
                             <span>Join Kudos Family (£4.95)</span>
-                            <span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded">UNLIMITED</span>
                         </a>
-                        <a href="https://buymeacoffee.com/chrispteemagician" target="_blank" className="block w-full btn-coffee py-3 rounded-xl flex items-center justify-center">
+                        
+                        <a href="https://buymeacoffee.com/chrispteemagician" target="_blank" className="block w-full btn-coffee py-4 rounded-xl flex items-center justify-center">
                             <span>☕ Buy Chris a Coffee</span>
-                            <span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded">24 HRS</span>
+                            <span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded uppercase font-bold">24 Hrs Pro</span>
                         </a>
-                        <button onClick={onShare} className="w-full btn-share py-3 rounded-xl flex items-center justify-center">
+
+                        <button onClick={onShare} className="w-full btn-share py-4 rounded-xl flex items-center justify-center">
                             <i className="fa-solid fa-share-nodes mr-2"></i>
                             <span>Share App</span>
-                            <span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded">1 FREE SCAN</span>
+                            <span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded uppercase font-bold">1 Free Scan</span>
                         </button>
-                    </div>
-                </div>
-            </div>
-        );
-
-        const GreenRoom = () => (
-            <div className="mt-8 bg-purple-50 rounded-xl p-4 border border-purple-100">
-                <h3 className="text-lg font-bold text-purple-900 mb-4 flex items-center">
-                    🎩 The Green Room <span className="pro-badge">PRO</span>
-                </h3>
-                <div className="space-y-4">
-                    <div className="bg-white p-3 rounded-lg shadow-sm flex items-start">
-                        <div className="text-2xl mr-3">🃏</div>
-                        <div>
-                            <div className="text-xs font-bold text-purple-500 uppercase">Trick of the Week</div>
-                            <div className="font-bold text-gray-800">The Invisible Deck</div>
-                            <p className="text-xs text-gray-500">Why it's still the best "Out" in magic.</p>
-                        </div>
-                    </div>
-                    <div className="bg-white p-3 rounded-lg shadow-sm flex items-start">
-                        <div className="text-2xl mr-3">🏪</div>
-                        <div>
-                            <div className="text-xs font-bold text-purple-500 uppercase">Dealer of the Week</div>
-                            <div className="font-bold text-gray-800">PropDog UK</div>
-                            <p className="text-xs text-gray-500">Revolutionizing props. Kindness first.</p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -88,16 +73,21 @@
             const [img, setImg] = useState(null);
             const [analysis, setAnalysis] = useState('');
             const [loading, setLoading] = useState(false);
+            
+            // Logic State
             const [isPro, setIsPro] = useState(false);
-            const [proCredits, setProCredits] = useState(0);
+            const [credits, setCredits] = useState(0);
             const [showNudge, setShowNudge] = useState(false);
             const fileRef = useRef(null);
 
             useEffect(() => {
-                const unlocked = localStorage.getItem('kudos_unlocked');
-                if (unlocked === 'true') { setIsPro(true); return; }
+                // Check Pro Status
+                const unlocked = localStorage.getItem('kudos_unlocked') === 'true';
+                if (unlocked) { setIsPro(true); return; }
+
+                // Check Credits
                 const savedCredits = parseInt(localStorage.getItem('magicoid_credits') || '0');
-                setProCredits(savedCredits);
+                setCredits(savedCredits);
             }, []);
 
             const triggerShare = () => {
@@ -106,14 +96,14 @@
                     navigator.share(shareData).then(() => giveCredit());
                 } else {
                     navigator.clipboard.writeText(window.location.href);
-                    alert("Link copied! Share it to get credit."); // Desktop fallback
+                    alert("Link copied! Share it to get credit.");
                     giveCredit();
                 }
             };
 
             const giveCredit = () => {
-                const newCredits = proCredits + 1;
-                setProCredits(newCredits);
+                const newCredits = credits + 1;
+                setCredits(newCredits);
                 localStorage.setItem('magicoid_credits', newCredits);
                 setShowNudge(false);
                 alert("🎉 You earned 1 Free Pro Scan!");
@@ -124,11 +114,11 @@
                 if (!file) return;
 
                 let runPro = isPro;
-                if (!isPro && proCredits > 0) {
-                    if (confirm(`Use 1 Credit for Pro Analysis? (${proCredits} left)`)) {
+                if (!isPro && credits > 0) {
+                    if (confirm(`Use 1 Credit for Pro Analysis? (${credits} left)`)) {
                         runPro = true;
-                        const remaining = proCredits - 1;
-                        setProCredits(remaining);
+                        const remaining = credits - 1;
+                        setCredits(remaining);
                         localStorage.setItem('magicoid_credits', remaining);
                     }
                 }
@@ -152,68 +142,95 @@
 
             return (
                 <div className="min-h-screen flex flex-col">
+                    {/* Header */}
                     <div className="app-header">
-                        <div className="flex justify-center items-center gap-2">
-                            <h1 className="text-4xl font-extrabold mb-1">Magic-Oid</h1>
-                            {isPro && <span className="bg-yellow-400 text-purple-900 text-xs font-bold px-2 py-1 rounded">PRO</span>}
+                        <div className="flex justify-center items-center gap-2 mb-1">
+                            <h1 className="text-4xl font-extrabold tracking-tight">Magic-Oid</h1>
+                            {isPro && <span className="pro-badge bg-yellow-400 text-purple-900">PRO</span>}
                         </div>
-                        <p className="text-purple-200 text-sm opacity-90">Identify • Authenticate • Connect</p>
-                        <div className="flex gap-3 justify-center mt-4">
-                            <a href="/dealers/" className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-full text-xs font-bold transition">🤝 Dealer Portal</a>
-                            {!isPro && <button onClick={() => setShowNudge(true)} className="bg-purple-900/50 hover:bg-purple-900/70 text-purple-100 px-4 py-2 rounded-full text-xs font-bold transition">🔓 Unlock Pro</button>}
+                        <p className="text-purple-200 text-sm font-medium opacity-90">Identify • Authenticate • Connect</p>
+                        
+                        <div className="flex gap-3 justify-center mt-6">
+                            <a href="/dealers/" className="bg-white/20 hover:bg-white/30 text-white px-5 py-2 rounded-full text-xs font-bold transition flex items-center">
+                                🤝 Become a Dealer
+                            </a>
+                            {!isPro && (
+                                <button onClick={() => setShowNudge(true)} className="bg-purple-900/40 hover:bg-purple-900/60 text-white px-5 py-2 rounded-full text-xs font-bold transition flex items-center">
+                                    🔓 Unlock Pro {credits > 0 ? `(${credits})` : ''}
+                                </button>
+                            )}
                         </div>
                     </div>
 
+                    {/* Main Card */}
                     <div className="main-card flex-grow relative">
-                        <div className="flex bg-gray-100 p-1 rounded-xl mb-6">
-                            <button onClick={() => setMode('identify')} className={`flex-1 tab-btn ${mode==='identify' ? 'bg-white shadow text-purple-600' : 'text-gray-400'}`}>🔮 Identify</button>
-                            <button onClick={() => setMode('roast')} className={`flex-1 tab-btn ${mode==='roast' ? 'bg-white shadow text-orange-500' : 'text-gray-400'}`}>🔥 Roast Me</button>
+                        
+                        <div className="flex bg-gray-100 p-1.5 rounded-2xl mb-8">
+                            <button onClick={() => setMode('identify')} className={`flex-1 tab-btn ${mode==='identify' ? 'bg-white shadow-sm text-purple-600' : 'text-gray-400 hover:text-gray-600'}`}>
+                                🔮 Identify
+                            </button>
+                            <button onClick={() => setMode('roast')} className={`flex-1 tab-btn ${mode==='roast' ? 'bg-white shadow-sm text-orange-500' : 'text-gray-400 hover:text-gray-600'}`}>
+                                🔥 Roast Me
+                            </button>
                         </div>
 
                         {!img ? (
                             <div onClick={() => fileRef.current.click()} className="upload-area group">
-                                <div className="text-5xl mb-3 group-hover:scale-110 transition duration-300">📸</div>
+                                <div className="text-6xl mb-4 group-hover:scale-110 transition duration-300">📸</div>
                                 <h3 className="text-xl font-bold text-gray-800">Tap to Analyze</h3>
-                                <p className="text-gray-400 text-sm mt-1">{isPro ? 'Pro Mode Active' : 'Basic Identification (Free)'}</p>
+                                <p className="text-gray-400 text-sm mt-2 font-medium">
+                                    {isPro ? 'Pro Mode Active: Full Details' : 'Basic Identification (Free)'}
+                                </p>
                             </div>
                         ) : (
-                            <div className="space-y-4">
+                            <div className="space-y-6">
                                 <img src={img} className="w-full rounded-2xl shadow-lg border border-gray-100" />
-                                {loading && <div className="text-center py-8"><div className="animate-spin text-4xl mb-2">🔮</div><p className="font-bold text-purple-600">Consulting the Oracle...</p></div>}
-                                {analysis && <div className="bg-purple-50 p-6 rounded-xl prose prose-purple text-sm max-w-none border border-purple-100" dangerouslySetInnerHTML={{ __html: marked.parse(analysis) }} />}
-                                {!isPro && analysis && (
-                                    <div onClick={() => setShowNudge(true)} className="bg-gray-800 text-white p-4 rounded-xl text-center cursor-pointer hover:bg-gray-700 transition shadow-lg">
-                                        <p className="font-bold mb-1">🔒 Valuation & Authenticity Hidden</p>
-                                        <p className="text-xs text-gray-300 mb-2">Buy a coffee or share to unlock</p>
-                                        <div className="inline-block bg-white/20 text-xs px-3 py-1 rounded-full">Unlock Now</div>
+                                
+                                {loading && (
+                                    <div className="text-center py-12">
+                                        <div className="animate-bounce text-5xl mb-4">🔮</div>
+                                        <p className="font-bold text-purple-600 text-lg">Consulting the Oracle...</p>
                                     </div>
                                 )}
-                                <button onClick={() => {setImg(null); setAnalysis('')}} className="btn-primary">Analyze Another</button>
+
+                                {analysis && (
+                                    <div className="bg-purple-50 p-6 rounded-2xl prose prose-purple text-sm max-w-none border border-purple-100 shadow-sm" 
+                                         dangerouslySetInnerHTML={{ __html: marked.parse(analysis) }} />
+                                )}
+
+                                {!isPro && analysis && (
+                                    <div onClick={() => setShowNudge(true)} className="bg-slate-800 text-white p-5 rounded-2xl text-center cursor-pointer hover:bg-slate-700 transition shadow-xl transform hover:-translate-y-1">
+                                        <div className="flex justify-center mb-2"><i class="fa-solid fa-lock text-xl text-yellow-400"></i></div>
+                                        <p className="font-bold text-lg mb-1">Valuation & Authenticity Locked</p>
+                                        <p className="text-xs text-slate-300 mb-3">Buy a coffee or share to reveal the secrets</p>
+                                        <div className="inline-block bg-white/20 text-xs px-4 py-1.5 rounded-full font-bold">Unlock Now</div>
+                                    </div>
+                                )}
+
+                                <button onClick={() => {setImg(null); setAnalysis('')}} className="btn-primary">
+                                    Analyze Another
+                                </button>
                             </div>
                         )}
-                        {/* CAMERA FIX: Added capture="environment" */}
                         <input ref={fileRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleScan} />
 
-                        {isPro ? <GreenRoom /> : (
-                            <div className="mt-8 opacity-60 filter grayscale cursor-pointer" onClick={() => setShowNudge(true)}>
-                                <h3 className="text-lg font-bold text-gray-400 mb-2">The Green Room (Locked)</h3>
-                                <div className="bg-gray-100 p-4 rounded-xl text-center border-2 border-dashed border-gray-300">
-                                    <p className="text-sm font-bold text-gray-500">Join to see Trick of the Week</p>
-                                    <p className="text-xs text-gray-400 mt-1">Exclusive Dealer Discounts & Tips</p>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="mt-12 text-center border-t border-gray-100 pt-6">
-                            <p className="text-xs font-bold text-purple-900 mb-2">Dedication to the Legends</p>
-                            <p className="text-[10px] text-gray-400 italic mb-4">Paul Daniels • David Copperfield • Wayne Dobson • Ali Bongo</p>
-                            <p className="text-[10px] text-gray-300">Part of the <a href="https://feelfamous.co.uk" className="text-purple-500 font-bold hover:underline">FeelFamous</a> Ecosystem</p>
+                        {/* Footer */}
+                        <div className="mt-16 text-center border-t border-gray-100 pt-8 pb-4">
+                            <p className="text-xs font-bold text-purple-900 mb-2 uppercase tracking-wide">Dedication to the Legends</p>
+                            <p className="text-[10px] text-gray-400 italic mb-6">
+                                Paul Daniels • David Copperfield • Wayne Dobson • Ali Bongo
+                            </p>
+                            <p className="text-[10px] text-gray-300">
+                                Part of the <a href="https://feelfamous.co.uk" className="text-purple-500 font-bold hover:underline">FeelFamous</a> Ecosystem
+                            </p>
                         </div>
                     </div>
+
                     {showNudge && <NudgeModal onClose={() => setShowNudge(false)} onShare={triggerShare} />}
                 </div>
             );
         };
+
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>

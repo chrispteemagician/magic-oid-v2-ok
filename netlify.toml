@@ -1,12 +1,14 @@
 [build]
-  publish = "public"
+  publish = "."   # This serves your index.html from the root
   functions = "netlify/functions"
 
+# 1. API REDIRECT (The Missing Link)
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
 
+# 2. CATCH-ALL (For your React App)
 [[redirects]]
   from = "/*"
   to = "/index.html"
