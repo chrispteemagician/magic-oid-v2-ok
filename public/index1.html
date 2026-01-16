@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Magic-Oid | The Magic Village</title>
+    <title>Magic-Oid | One Image Detective Droid</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#7c3aed">
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -45,11 +45,10 @@
                         <p className="text-xs text-gray-700"><i className="fa-solid fa-check text-green-500 mr-2"></i><strong>Cancel Anytime</strong> - No lock-ins.</p>
                         <p className="text-xs text-gray-700"><i className="fa-solid fa-check text-green-500 mr-2"></i><strong>Rollover Credits</strong> - Never lose them.</p>
                         <p className="text-xs text-gray-700"><i className="fa-solid fa-check text-green-500 mr-2"></i><strong>+5% Bonus</strong> for Early Adopters.</p>
-                        <p className="text-xs text-gray-700"><i className="fa-solid fa-check text-green-500 mr-2"></i><strong>Your Voice</strong> in the Village.</p>
                     </div>
                     <div className="space-y-3">
                         <a href="https://feelfamous.co.uk/join" target="_blank" className="block w-full btn-primary py-4 rounded-xl flex items-center justify-center"><span>Join Early Adopter (£4.95/mo)</span></a>
-                        <a href="https://buymeacoffee.com/chrispteemagician" target="_blank" className="block w-full btn-coffee py-4 rounded-xl flex items-center justify-center"><span>☕ Buy Chris a Coffee</span><span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded uppercase font-bold">24 Hrs Pro</span></a>
+                        <a href="https://buymeacoffee.com/chrispteemagician" target="_blank" className="block w-full btn-coffee py-4 rounded-xl flex items-center justify-center"><span>☕ Buy Chris P Tee a Coffee</span><span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded uppercase font-bold">24 Hrs Pro</span></a>
                         <button onClick={onShare} className="w-full btn-share py-4 rounded-xl flex items-center justify-center"><i className="fa-solid fa-share-nodes mr-2"></i><span>Share App</span><span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded uppercase font-bold">1 Free Scan</span></button>
                     </div>
                 </div>
@@ -119,7 +118,6 @@
                         <div className="flex flex-col items-center mb-2">
                             <h1 className="text-4xl font-extrabold tracking-tight mb-1">Magic-Oid</h1>
                             <p className="text-purple-200 text-xs font-bold uppercase tracking-widest">The One Image Detective Droid</p>
-                            <p className="text-white text-xs italic mt-1 opacity-90">"A Village for Magicians & Their Familiars"</p>
                         </div>
                         <div className="funnel-box">
                             <p className="text-xs text-white leading-relaxed"><strong>Free to use.</strong> Join the <span className="text-yellow-300 font-bold">FeelFamous Family</span> to unlock <span className="bg-yellow-400 text-purple-900 text-[10px] px-1 rounded font-bold">PRO</span> features across <strong>ALL</strong> Oid Apps.</p>
@@ -157,9 +155,9 @@
                         <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleScan} />
                         <input ref={galleryRef} type="file" accept="image/*" className="hidden" onChange={handleScan} />
                         <div className="mt-16 text-center border-t border-gray-100 pt-8 pb-4">
-                            <p className="text-xs font-bold text-purple-900 mb-2 uppercase tracking-wide">We All Stand on the Shoulders of Giants</p>
+                            <p className="text-xs font-bold text-purple-900 mb-2 uppercase tracking-wide">Dedication to the Legends</p>
                             <p className="text-[10px] text-gray-400 italic mb-6">Paul Daniels • Jeff McBride • Eugene Burger • Wayne Dobson • Ali Bongo • Paul Zenon • Penn and Teller • Chris P Tee • Kreskin</p>
-                            <p className="text-[10px] text-gray-300 space-x-2">Part of the <a href="https://feelfamous.co.uk" className="text-purple-500 font-bold hover:underline">FeelFamous</a> Ecosystem • <a href="https://cannabin-oid.com" className="text-green-500 font-bold hover:underline" target="_blank">Cannabin-Oid</a></p>
+                            <p className="text-[10px] text-gray-300">Part of the <a href="https://feelfamous.co.uk" className="text-purple-500 font-bold hover:underline">FeelFamous</a> Ecosystem</p>
                         </div>
                     </div>
                     {showNudge && <NudgeModal onClose={() => setShowNudge(false)} onShare={triggerShare} />}
