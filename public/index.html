@@ -21,8 +21,11 @@
         .main-card { background: white; border-radius: 24px 24px 0 0; min-height: 80vh; padding: 1.5rem; box-shadow: 0 -10px 40px rgba(0,0,0,0.2); }
         
         .tab-btn { padding: 12px 0; border-radius: 12px; font-weight: 700; transition: all 0.2s; }
-        .upload-area { border: 3px dashed #e5e7eb; border-radius: 20px; padding: 3rem 1rem; text-align: center; transition: all 0.2s; background: #f9fafb; cursor: pointer; }
-        .upload-area:active { background: #f3f4f6; border-color: #7c3aed; }
+        
+        /* New Split Upload Area */
+        .upload-container { display: flex; gap: 10px; margin-bottom: 1rem; }
+        .upload-btn { flex: 1; border: 2px dashed #e5e7eb; border-radius: 20px; padding: 2rem 1rem; text-align: center; transition: all 0.2s; background: #f9fafb; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .upload-btn:active { background: #f3f4f6; border-color: #7c3aed; transform: scale(0.98); }
         
         .btn-primary { background: #7c3aed; color: white; font-weight: bold; padding: 1rem; border-radius: 12px; width: 100%; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
         .btn-coffee { background: #f59e0b; color: white; font-weight: bold; }
@@ -45,12 +48,19 @@
                 <div className="bg-white rounded-3xl p-6 max-w-sm w-full text-center relative shadow-2xl transform transition-all scale-100">
                     <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full">✕</button>
                     <div className="text-5xl mb-4">✨</div>
-                    <h2 className="text-2xl font-extrabold text-purple-900 mb-2">Unlock Pro Powers</h2>
-                    <p className="text-gray-500 mb-6 text-sm">Become a <strong>Bridge Walker</strong>. Access authentication, valuations & The Green Room.</p>
+                    <h2 className="text-2xl font-extrabold text-purple-900 mb-1">Unlock Pro Powers</h2>
+                    <p className="text-purple-600 font-bold text-sm mb-4">Become a Bridge Walker</p>
+                    
+                    <div className="bg-purple-50 rounded-xl p-4 mb-6 text-left space-y-2 border border-purple-100">
+                        <p class="text-xs text-gray-700"><i class="fa-solid fa-check text-green-500 mr-2"></i><strong>Cancel Anytime</strong> - No lock-ins.</p>
+                        <p class="text-xs text-gray-700"><i class="fa-solid fa-check text-green-500 mr-2"></i><strong>Rollover Credits</strong> - Never lose them.</p>
+                        <p class="text-xs text-gray-700"><i class="fa-solid fa-check text-green-500 mr-2"></i><strong>+5% Bonus</strong> for Early Adopters.</p>
+                        <p class="text-xs text-gray-700"><i class="fa-solid fa-check text-green-500 mr-2"></i><strong>Your Voice</strong> in the Village.</p>
+                    </div>
                     
                     <div className="space-y-3">
                         <a href="https://feelfamous.co.uk/join" target="_blank" className="block w-full btn-primary py-4 rounded-xl flex items-center justify-center">
-                            <span>Join Kudos Family Early Adopter (£4.95)</span>
+                            <span>Join Early Adopter (£4.95/mo)</span>
                         </a>
                         
                         <a href="https://buymeacoffee.com/chrispteemagician" target="_blank" className="block w-full btn-coffee py-4 rounded-xl flex items-center justify-center">
@@ -78,7 +88,10 @@
             const [isPro, setIsPro] = useState(false);
             const [credits, setCredits] = useState(0);
             const [showNudge, setShowNudge] = useState(false);
-            const fileRef = useRef(null);
+            
+            // Two Refs for the two buttons
+            const cameraRef = useRef(null);
+            const galleryRef = useRef(null);
 
             useEffect(() => {
                 // Check Pro Status
@@ -175,12 +188,23 @@
                         </div>
 
                         {!img ? (
-                            <div onClick={() => fileRef.current.click()} className="upload-area group">
-                                <div className="text-6xl mb-4 group-hover:scale-110 transition duration-300">📸</div>
-                                <h3 className="text-xl font-bold text-gray-800">Tap to Analyze</h3>
-                                <p className="text-gray-400 text-sm mt-2 font-medium">
-                                    {isPro ? 'Pro Mode Active: Full Details' : 'Basic Identification (Free)'}
-                                </p>
+                            <div>
+                                <h3 className="text-xl font-bold text-gray-800 text-center mb-4">
+                                    {isPro ? 'Pro Mode Active' : 'Basic Identification'}
+                                </h3>
+                                
+                                {/* TWO BUTTONS: Camera vs Gallery */}
+                                <div className="upload-container">
+                                    <div onClick={() => cameraRef.current.click()} className="upload-btn group">
+                                        <div className="text-4xl mb-2 group-hover:scale-110 transition duration-300">📸</div>
+                                        <span className="text-xs font-bold text-gray-600">Camera</span>
+                                    </div>
+                                    <div onClick={() => galleryRef.current.click()} className="upload-btn group">
+                                        <div className="text-4xl mb-2 group-hover:scale-110 transition duration-300">🖼️</div>
+                                        <span className="text-xs font-bold text-gray-600">Gallery</span>
+                                    </div>
+                                </div>
+                                <p className="text-center text-[10px] text-gray-400">Choose your source</p>
                             </div>
                         ) : (
                             <div className="space-y-6">
@@ -212,8 +236,10 @@
                                 </button>
                             </div>
                         )}
-                        {/* UPDATE: Removed capture="environment" to allow Gallery access */}
-                        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleScan} />
+                        
+                        {/* Hidden Inputs: One for Camera, One for Gallery */}
+                        <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleScan} />
+                        <input ref={galleryRef} type="file" accept="image/*" className="hidden" onChange={handleScan} />
 
                         {/* Footer */}
                         <div className="mt-16 text-center border-t border-gray-100 pt-8 pb-4">
