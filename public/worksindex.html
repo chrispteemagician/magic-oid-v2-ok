@@ -34,90 +34,27 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- THE AMBASSADOR MODAL ---
-        const NudgeModal = ({ onClose, onShare }) => {
-            const [showQR, setShowQR] = useState(false);
-            
-            // 🔧 VILLAGE CONFIG
-            const villageName = "The Magic Village"; 
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.href + "?ref=ambassador")}`;
-
-            return (
-                <div className="modal-overlay">
-                    <div className="bg-white rounded-3xl p-6 max-w-sm w-full text-center relative shadow-2xl transform transition-all scale-100">
-                        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full z-10">✕</button>
-                        
-                        {!showQR ? (
-                            <>
-                                <div className="text-5xl mb-4">✨</div>
-                                <h2 className="text-2xl font-extrabold text-slate-900 mb-1">Enter {villageName}</h2>
-                                <p className="text-slate-500 font-bold text-[10px] mb-4 uppercase tracking-widest">Active • Generous • Helpful • Kind</p>
-                                
-                                <div className="bg-slate-50 rounded-xl p-4 mb-6 text-left space-y-3 border border-slate-100">
-                                    <p className="text-xs text-slate-600 leading-relaxed">
-                                        <i className="fa-solid fa-heart text-red-500 mr-2"></i>
-                                        <strong>No Noise. No Politics.</strong> Just us.
-                                    </p>
-                                    <p className="text-xs text-slate-600 leading-relaxed">
-                                        <i className="fa-solid fa-gem text-purple-500 mr-2"></i>
-                                        <strong>Early Adopters</strong> earn 2x Kudos on signup.
-                                    </p>
-                                    <p className="text-xs text-slate-600 leading-relaxed">
-                                        <i className="fa-solid fa-users text-blue-500 mr-2"></i>
-                                        <strong>Share your QR</strong> to earn Kudos for every visitor, coffee, or new villager.
-                                    </p>
-                                </div>
-                                
-                                <div className="space-y-3">
-                                    <a href="https://feelfamous.co.uk/join" target="_blank" className="block w-full btn-primary py-4 rounded-xl flex items-center justify-center shadow-lg transform active:scale-95 transition">
-                                        <span>Join Early Adopters (£4.95)</span>
-                                    </a>
-                                    
-                                    <button onClick={() => setShowQR(true)} className="w-full bg-slate-800 text-white font-bold py-4 rounded-xl flex items-center justify-center hover:bg-slate-900 transition">
-                                        <i className="fa-solid fa-qrcode mr-2"></i>
-                                        <span>My Ambassador Code</span>
-                                    </button>
-
-                                    <div className="flex gap-2">
-                                        <a href="https://buymeacoffee.com/chrispteemagician" target="_blank" className="flex-1 bg-yellow-400 text-yellow-900 font-bold py-3 rounded-xl text-xs flex items-center justify-center hover:bg-yellow-300 transition">
-                                            ☕ Buy Coffee
-                                        </a>
-                                        <button onClick={onShare} className="flex-1 bg-green-500 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center hover:bg-green-600 transition">
-                                            <i className="fa-solid fa-share mr-2"></i> Share App
-                                        </button>
-                                    </div>
-                                </div>
-                            </>
-                        ) : (
-                            <div className="py-4 animate-fade-in">
-                                <h3 className="text-xl font-bold text-slate-800 mb-1">Your Passport</h3>
-                                <p className="text-[10px] text-slate-400 mb-4 uppercase tracking-wide">Share Anywhere • Earn Kudos</p>
-                                
-                                <div className="flex justify-center mb-4">
-                                    <div className="p-4 bg-white border-2 border-dashed border-slate-300 rounded-2xl shadow-inner relative">
-                                        <img src={qrUrl} alt="Ambassador QR Code" className="w-48 h-48" />
-                                        <div className="absolute -bottom-3 -right-3 bg-purple-600 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">Early Adopter</div>
-                                    </div>
-                                </div>
-                                
-                                <div className="bg-blue-50 p-3 rounded-lg mb-4 text-left space-y-1">
-                                    <p className="text-[10px] text-blue-800"><i class="fa-solid fa-eye mr-1"></i> <strong>Visitor:</strong> +10 Kudos</p>
-                                    <p className="text-[10px] text-blue-800"><i class="fa-solid fa-mug-hot mr-1"></i> <strong>Coffee:</strong> +100 Kudos</p>
-                                    <p className="text-[10px] text-blue-800"><i class="fa-solid fa-user-plus mr-1"></i> <strong>New Adopter:</strong> +500 Kudos & <strong>10 Gift Passes</strong></p>
-                                </div>
-
-                                <button onClick={() => { onShare(); onClose(); }} className="btn-primary py-3 rounded-xl w-full font-bold">
-                                    Share Link Instead
-                                </button>
-                                <button onClick={() => setShowQR(false)} className="mt-4 text-xs text-slate-400 underline hover:text-slate-600">
-                                    Back to Options
-                                </button>
-                            </div>
-                        )}
+        const NudgeModal = ({ onClose, onShare }) => (
+            <div className="modal-overlay">
+                <div className="bg-white rounded-3xl p-6 max-w-sm w-full text-center relative shadow-2xl">
+                    <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full">✕</button>
+                    <div className="text-5xl mb-4">✨</div>
+                    <h2 className="text-2xl font-extrabold text-purple-900 mb-1">Unlock Pro Powers</h2>
+                    <p className="text-purple-600 font-bold text-sm mb-4">Become a Bridge Walker</p>
+                    <div className="bg-purple-50 rounded-xl p-4 mb-6 text-left space-y-2 border border-purple-100">
+                        <p className="text-xs text-gray-700"><i className="fa-solid fa-check text-green-500 mr-2"></i><strong>Cancel Anytime</strong> - No lock-ins.</p>
+                        <p className="text-xs text-gray-700"><i className="fa-solid fa-check text-green-500 mr-2"></i><strong>Rollover Credits</strong> - Never lose them.</p>
+                        <p className="text-xs text-gray-700"><i className="fa-solid fa-check text-green-500 mr-2"></i><strong>+5% Bonus</strong> for Early Adopters.</p>
+                        <p className="text-xs text-gray-700"><i className="fa-solid fa-check text-green-500 mr-2"></i><strong>Your Voice</strong> in the Village.</p>
+                    </div>
+                    <div className="space-y-3">
+                        <a href="https://feelfamous.co.uk/join" target="_blank" className="block w-full btn-primary py-4 rounded-xl flex items-center justify-center"><span>Join Early Adopter (£4.95/mo)</span></a>
+                        <a href="https://buymeacoffee.com/chrispteemagician" target="_blank" className="block w-full btn-coffee py-4 rounded-xl flex items-center justify-center"><span>☕ Buy Chris a Coffee</span><span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded uppercase font-bold">24 Hrs Pro</span></a>
+                        <button onClick={onShare} className="w-full btn-share py-4 rounded-xl flex items-center justify-center"><i className="fa-solid fa-share-nodes mr-2"></i><span>Share App</span><span className="ml-2 bg-white/20 text-[10px] px-2 py-0.5 rounded uppercase font-bold">1 Free Scan</span></button>
                     </div>
                 </div>
-            );
-        };
+            </div>
+        );
 
         const App = () => {
             const [mode, setMode] = useState('identify');
@@ -201,12 +138,12 @@
                         </div>
                         {!img ? (
                             <div>
-                                <h3 className="text-xl font-bold text-gray-800 text-center mb-4">{isPro ? 'Pro Mode Active' : 'Test Me • Fool Me • Valuate'}</h3>
+                                <h3 className="text-xl font-bold text-gray-800 text-center mb-4">{isPro ? 'Pro Mode Active' : 'Basic Identification'}</h3>
                                 <div className="upload-container">
                                     <div onClick={() => cameraRef.current.click()} className="upload-btn group"><div className="text-4xl mb-2 group-hover:scale-110 transition duration-300">📸</div><span className="text-xs font-bold text-gray-600">Camera</span></div>
                                     <div onClick={() => galleryRef.current.click()} className="upload-btn group"><div className="text-4xl mb-2 group-hover:scale-110 transition duration-300">🖼️</div><span className="text-xs font-bold text-gray-600">Gallery</span></div>
                                 </div>
-                                <p className="text-center text-[10px] text-gray-400">Don't know what it is? Ask. If I'm wrong, Roast Me!</p>
+                                <p className="text-center text-[10px] text-gray-400">Choose your source</p>
                             </div>
                         ) : (
                             <div className="space-y-6">
