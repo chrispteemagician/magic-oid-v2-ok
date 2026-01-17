@@ -4,6 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Magic-Oid | The Magic Village</title>
+    
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="apple-touch-icon" href="logo.jpg">
+
+    <meta name="description" content="Identify magic tricks, props, and collectibles instantly with AI. Magic-Oid is the digital village for magicians to value items and connect with dealers.">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Magic-Oid",
+      "url": "https://magic-oid.co.uk",
+      "applicationCategory": "UtilityApplication",
+      "genre": "Magic & Collectibles",
+      "operatingSystem": "All",
+      "description": "An AI-powered identification tool for magicians. Identify props, get valuations, and connect with the magic community.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
+      "author": { "@type": "Person", "name": "Chris P Tee" },
+      "isPartOf": { "@type": "WebSite", "url": "https://feelfamous.co.uk", "name": "FeelFamous Network" }
+    }
+    </script>
+
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#7c3aed">
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -34,11 +55,8 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- THE AMBASSADOR MODAL ---
         const NudgeModal = ({ onClose, onShare }) => {
             const [showQR, setShowQR] = useState(false);
-            
-            // 🔧 VILLAGE CONFIG
             const villageName = "The Magic Village"; 
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.href + "?ref=ambassador")}`;
 
@@ -54,37 +72,17 @@
                                 <p className="text-slate-500 font-bold text-[10px] mb-4 uppercase tracking-widest">Active • Generous • Helpful • Kind</p>
                                 
                                 <div className="bg-slate-50 rounded-xl p-4 mb-6 text-left space-y-3 border border-slate-100">
-                                    <p className="text-xs text-slate-600 leading-relaxed">
-                                        <i className="fa-solid fa-heart text-red-500 mr-2"></i>
-                                        <strong>No Noise. No Politics.</strong> Just us.
-                                    </p>
-                                    <p className="text-xs text-slate-600 leading-relaxed">
-                                        <i className="fa-solid fa-gem text-purple-500 mr-2"></i>
-                                        <strong>Early Adopters</strong> earn 2x Kudos on signup.
-                                    </p>
-                                    <p className="text-xs text-slate-600 leading-relaxed">
-                                        <i className="fa-solid fa-users text-blue-500 mr-2"></i>
-                                        <strong>Share your QR</strong> to earn Kudos for every visitor, coffee, or new villager.
-                                    </p>
+                                    <p className="text-xs text-slate-600 leading-relaxed"><i className="fa-solid fa-heart text-red-500 mr-2"></i><strong>No Noise. No Politics.</strong> Just us.</p>
+                                    <p className="text-xs text-slate-600 leading-relaxed"><i className="fa-solid fa-gem text-purple-500 mr-2"></i><strong>Early Adopters</strong> earn 2x Kudos on signup.</p>
+                                    <p className="text-xs text-slate-600 leading-relaxed"><i className="fa-solid fa-users text-blue-500 mr-2"></i><strong>Share your QR</strong> to earn Kudos for every visitor, coffee, or new villager.</p>
                                 </div>
                                 
                                 <div className="space-y-3">
-                                    <a href="https://feelfamous.co.uk/join" target="_blank" className="block w-full btn-primary py-4 rounded-xl flex items-center justify-center shadow-lg transform active:scale-95 transition">
-                                        <span>Join Early Adopters (£4.95)</span>
-                                    </a>
-                                    
-                                    <button onClick={() => setShowQR(true)} className="w-full bg-slate-800 text-white font-bold py-4 rounded-xl flex items-center justify-center hover:bg-slate-900 transition">
-                                        <i className="fa-solid fa-qrcode mr-2"></i>
-                                        <span>My Ambassador Code</span>
-                                    </button>
-
+                                    <a href="https://feelfamous.co.uk/join" target="_blank" className="block w-full btn-primary py-4 rounded-xl flex items-center justify-center shadow-lg transform active:scale-95 transition"><span>Join Early Adopters (£4.95)</span></a>
+                                    <button onClick={() => setShowQR(true)} className="w-full bg-slate-800 text-white font-bold py-4 rounded-xl flex items-center justify-center hover:bg-slate-900 transition"><i className="fa-solid fa-qrcode mr-2"></i><span>My Ambassador Code</span></button>
                                     <div className="flex gap-2">
-                                        <a href="https://buymeacoffee.com/chrispteemagician" target="_blank" className="flex-1 bg-yellow-400 text-yellow-900 font-bold py-3 rounded-xl text-xs flex items-center justify-center hover:bg-yellow-300 transition">
-                                            ☕ Buy Coffee
-                                        </a>
-                                        <button onClick={onShare} className="flex-1 bg-green-500 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center hover:bg-green-600 transition">
-                                            <i className="fa-solid fa-share mr-2"></i> Share App
-                                        </button>
+                                        <a href="https://buymeacoffee.com/chrispteemagician" target="_blank" className="flex-1 bg-yellow-400 text-yellow-900 font-bold py-3 rounded-xl text-xs flex items-center justify-center hover:bg-yellow-300 transition">☕ Buy Coffee</a>
+                                        <button onClick={onShare} className="flex-1 bg-green-500 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center hover:bg-green-600 transition"><i className="fa-solid fa-share mr-2"></i> Share App</button>
                                     </div>
                                 </div>
                             </>
@@ -92,26 +90,14 @@
                             <div className="py-4 animate-fade-in">
                                 <h3 className="text-xl font-bold text-slate-800 mb-1">Your Passport</h3>
                                 <p className="text-[10px] text-slate-400 mb-4 uppercase tracking-wide">Share Anywhere • Earn Kudos</p>
-                                
-                                <div className="flex justify-center mb-4">
-                                    <div className="p-4 bg-white border-2 border-dashed border-slate-300 rounded-2xl shadow-inner relative">
-                                        <img src={qrUrl} alt="Ambassador QR Code" className="w-48 h-48" />
-                                        <div className="absolute -bottom-3 -right-3 bg-purple-600 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">Early Adopter</div>
-                                    </div>
-                                </div>
-                                
+                                <div className="flex justify-center mb-4"><div className="p-4 bg-white border-2 border-dashed border-slate-300 rounded-2xl shadow-inner relative"><img src={qrUrl} alt="Ambassador QR Code" className="w-48 h-48" /><div className="absolute -bottom-3 -right-3 bg-purple-600 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">Early Adopter</div></div></div>
                                 <div className="bg-blue-50 p-3 rounded-lg mb-4 text-left space-y-1">
                                     <p className="text-[10px] text-blue-800"><i class="fa-solid fa-eye mr-1"></i> <strong>Visitor:</strong> +10 Kudos</p>
                                     <p className="text-[10px] text-blue-800"><i class="fa-solid fa-mug-hot mr-1"></i> <strong>Coffee:</strong> +100 Kudos</p>
                                     <p className="text-[10px] text-blue-800"><i class="fa-solid fa-user-plus mr-1"></i> <strong>New Adopter:</strong> +500 Kudos & <strong>10 Gift Passes</strong></p>
                                 </div>
-
-                                <button onClick={() => { onShare(); onClose(); }} className="btn-primary py-3 rounded-xl w-full font-bold">
-                                    Share Link Instead
-                                </button>
-                                <button onClick={() => setShowQR(false)} className="mt-4 text-xs text-slate-400 underline hover:text-slate-600">
-                                    Back to Options
-                                </button>
+                                <button onClick={() => { onShare(); onClose(); }} className="btn-primary py-3 rounded-xl w-full font-bold">Share Link Instead</button>
+                                <button onClick={() => setShowQR(false)} className="mt-4 text-xs text-slate-400 underline hover:text-slate-600">Back to Options</button>
                             </div>
                         )}
                     </div>
@@ -180,6 +166,7 @@
                 <div className="min-h-screen flex flex-col">
                     <div className="app-header">
                         <div className="flex flex-col items-center mb-2">
+                            <img src="logo.jpg" className="w-24 h-24 rounded-2xl shadow-2xl mb-4 hover:scale-105 transition duration-300 border-2 border-white/20" alt="Magic-Oid Logo" />
                             <h1 className="text-4xl font-extrabold tracking-tight mb-1">Magic-Oid</h1>
                             <p className="text-purple-200 text-xs font-bold uppercase tracking-widest">The One Image Detective Droid</p>
                             <p className="text-white text-xs italic mt-1 opacity-90">"A Village for Magicians & Their Familiars"</p>
